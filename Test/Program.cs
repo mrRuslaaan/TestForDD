@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using Test.DLL;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Test
 {
@@ -33,11 +34,25 @@ namespace Test
 
             WordsCounter wc = new WordsCounter();
 
-            Type myType = wc.GetType();
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
 
-            var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
+            //Type myType = wc.GetType();
+            //
+            //var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
+            //
+            //method.Invoke(wc, new object[] { words, dict });
 
-            method.Invoke(wc, new object[] { words, dict });
+            wc.WordsCountAsync(words, dict);
+
+            stopWatch.Stop();
+
+            TimeSpan ts = stopWatch.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                ts.Hours, ts.Minutes, ts.Seconds,
+                ts.Milliseconds);
+            Console.WriteLine("RunTime " + elapsedTime);
 
 
             using (var writer = new StreamWriter(writePath))
