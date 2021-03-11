@@ -37,13 +37,13 @@ namespace Test
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            //Type myType = wc.GetType();
-            //
-            //var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
-            //
-            //method.Invoke(wc, new object[] { words, dict });
+            Type myType = wc.GetType();
+            
+            var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            method.Invoke(wc, new object[] { words, dict }); // averageTime = 650 Milliseconds
 
-            wc.WordsCountAsync(words, dict);
+            wc.WordsCountAsync(words, dict); // averageTime = 180 Milliseconds
 
             stopWatch.Stop();
 
