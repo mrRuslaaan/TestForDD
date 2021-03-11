@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using Test.DLL;
+using System.Reflection;
 
 namespace Test
 {
@@ -27,22 +29,16 @@ namespace Test
                     words.Add(w.ToLower());
                 }
             }
-            sr.Close();        
+            sr.Close();
 
-            var wordsGroups = from w in words
-                              group w by w into g
-                              //orderby words.Count descending не понимаю почему работает некорректно 
-                              select new { Name = g.Key, Count = g.Count() };
+            WordsCounter wc = new WordsCounter();
 
-            var wordsOrdered = wordsGroups.
-                OrderByDescending(wg => wg.Count)
-                .ToList();
+            Type myType = wc.GetType();
 
-            ///добавил словарь потому что не нашел способ, как можно записать анонимный тип в файл
-            foreach (var group in wordsOrdered)
-            {
-                dict.Add(group.Name, group.Count);
-            }
+            var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            method.Invoke(wc, new object[] { words, dict });
+
 
             using (var writer = new StreamWriter(writePath))
             {
@@ -51,8 +47,6 @@ namespace Test
                     writer.WriteLine($"{kvp.Key}\t{kvp.Value}");
                 }
             }
-
-            Console.ReadLine();
         }
     }
 }
