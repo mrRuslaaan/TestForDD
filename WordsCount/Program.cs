@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Test.DLL;
 using System.Reflection;
 using System.Diagnostics;
 
@@ -15,14 +14,14 @@ namespace Test
             List<string> words = new List<string>();
             Dictionary<string, int> dict = new Dictionary<string, int>();
 
-            string readPath = @"C:\Users\annae\Desktop\TestTask\Test\Test\Война и мир Том 1.txt";
+            string readPath = @"C:\Users\annae\Desktop\Война и мир Том 1.txt";
             string writePath = @"C:\Users\annae\Desktop\Война и мир Том 1 количество уникальных слов.txt";
 
             StreamReader sr = new StreamReader(readPath);
 
             while (!sr.EndOfStream)
             {
-                char[] separators = new char[] { ' ', ',', '!', '-', '\t', '\n', '?', '.', ':', '/', '|', '[', ']'};
+                char[] separators = new char[] { ' ', ',', '!', '-', '\t', '\n', '?', '.', ':', '/', '|', '[', ']' };
                 string[] textMass = sr.ReadLine().Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var w in textMass)
@@ -32,28 +31,10 @@ namespace Test
             }
             sr.Close();
 
-            WordsCounter wc = new WordsCounter();
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            Type myType = wc.GetType();
-            
-            var method = myType.GetMethod("WordsCount", BindingFlags.NonPublic | BindingFlags.Instance);
-            
-            method.Invoke(wc, new object[] { words, dict }); // averageTime = 650 Milliseconds
-
-            wc.WordsCountAsync(words, dict); // averageTime = 180 Milliseconds
-
-            stopWatch.Stop();
-
-            TimeSpan ts = stopWatch.Elapsed;
-
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                ts.Hours, ts.Minutes, ts.Seconds,
-                ts.Milliseconds);
-            Console.WriteLine("RunTime " + elapsedTime);
-
+            using (var client = new WordsCount.WCServiceRef.WCServiceClient())
+            {
+                dict = client.WordsCount(words.ToArray(), dict);
+            }                
 
             using (var writer = new StreamWriter(writePath))
             {

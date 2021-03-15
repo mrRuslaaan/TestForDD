@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:53242/WCService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:element name="WordsCount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="words" nillable="true" type="q1:ArrayOfstring" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="dict" nillable="true" type="q2:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="WordsCountResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="WordsCountResult" nillable="true" type="q3:ArrayOfKeyValueOfstringint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
